@@ -8,3 +8,4 @@ This app is a little side project of mine. My goal with this app is to provide a
 - [ ] implement a way to save and view the vacations history
 - [ ] create a pleasing color pallete
 - [ ] implement dark mode
+- [ ] deploy the app to the web
