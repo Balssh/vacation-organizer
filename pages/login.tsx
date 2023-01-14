@@ -1,8 +1,15 @@
 import Link from "next/link";
 import { initializeFirebase } from "../firebase/firebaseApp";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
+import { Formik, Field, Form, FormikHelpers } from "formik";
+import { LoginUser } from "../interfaces/interfaces";
 
 const Login = () => {
   const app = initializeFirebase();
@@ -15,10 +22,15 @@ const Login = () => {
     return <div>Loading...</div>;
   }
   if (user) {
-    return <div>Pla Pizda</div>;
+    router.push("/user");
   }
-  const signIn = async () => {
+  const signInGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
+    console.log(result.user);
+  };
+
+  const signInEmail = async (email: string, password: string) => {
+    const result = await signInWithEmailAndPassword(auth, email, password);
     console.log(result.user);
   };
   // console.log(app);
@@ -31,15 +43,57 @@ const Login = () => {
         <div className="flex justify-center">
           <button
             className="border border-zinc-900 p-2 text-2xl hover:bg-red-400"
-            onClick={signIn}
+            onClick={signInGoogle}
           >
             Sign in with Google
           </button>
         </div>
-        <div className="flex justify-center">
-          <button className="border border-zinc-900 p-2 text-2xl hover:bg-red-400">
-            <Link href={"/register"}>Register</Link>
-          </button>
+        <div className="inline-flex w-full items-center justify-center">
+          <hr className="my-4 h-px w-full border-0 bg-gray-200" />
+          <span className="text-gray-90 absolute left-1/2 -translate-x-1/2 bg-teal-50 px-3 font-medium">
+            or
+          </span>
+        </div>
+        <div className="border border-zinc-900 p-4">
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            onSubmit={(
+              values: LoginUser,
+              { setSubmitting }: FormikHelpers<LoginUser>
+            ) => {
+              signInEmail(values.email, values.password);
+              // alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }}
+          >
+            <Form>
+              <label htmlFor="email">Email</label>
+              <br />
+              <Field
+                id="email"
+                name="email"
+                placeholder="john@acme.com"
+                type="email"
+                // defaultValue="test@gmail.com"
+              />
+              <br />
+              <label htmlFor="password">Password</label>
+              <br />
+              <Field id="password" name="password" placeholder="" />
+              <br />
+              <button className="mt-2 border border-zinc-900" type="submit">
+                Submit
+              </button>
+            </Form>
+          </Formik>
+        </div>
+        <hr />
+        <div className="flex justify-center space-x-1">
+          <span>Don't have an account?</span>
+          <Link href={"/register"}> Register</Link>
         </div>
       </div>
     </div>

@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
+import { initializeFirebase } from "../firebase/firebaseApp";
 
 // This should be the landing page
 const Home = () => {
-  const auth = getAuth();
+  const app = initializeFirebase();
+  const auth = getAuth(app);
   const [user, loading] = useAuthState(auth);
   return (
     <div className="my-5 grid grid-cols-12 content-evenly gap-2 px-5">
