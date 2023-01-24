@@ -4,11 +4,10 @@ export interface LoginUser {
 }
 
 export interface Vacation {
-  id?: string;
   name: string;
-  description?: string;
-  ownerID: string;
+  completed: boolean;
   cost: number;
   location: string;
-  participants: string;
+  ownerID: string;
+  participants: [{ name: string; paid: boolean }];
 }

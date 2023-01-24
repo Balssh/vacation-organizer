@@ -1,4 +1,14 @@
 import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  where,
+  getDocs,
+  query,
+} from "firebase/firestore";
+import { Vacation } from "../interfaces/interfaces";
+
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -11,8 +21,35 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-console.log(app);
+const db = getFirestore(app);
+// console.log(app);
 // Export function to initialize Firebase
 export const initializeFirebase = () => {
   return app;
+};
+
+// Export function to add a vacation to the database
+export const addVacation = async (vacation: Vacation) => {
+  try {
+    const docRef = await addDoc(collection(db, "vacations"), vacation);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
+// Export function to get all vacations from the database
+export const getVacations = async () => {
+  const querySnapshot = await getDocs(collection(db, "vacations"));
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+  });
+};
+
+export const getUserVacations = async (userId: string) => {
+  const q = query(collection(db, "vacations"), where("userId", "==", userId));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+  });
 };

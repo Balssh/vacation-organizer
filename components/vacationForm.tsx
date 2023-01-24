@@ -1,7 +1,8 @@
-import { Formik, Field, Form, FormikHelpers } from "formik";
+import { Formik, Field, Form, FormikHelpers, FieldArray } from "formik";
 import { Vacation } from "../interfaces/interfaces";
-import type { User } from "firebase/auth";
+import { User } from "firebase/auth";
 import { FC } from "react";
+import { addVacation } from "../firebase/firebaseApp";
 
 const VacationForm: FC<{ currentUser: User }> = ({ currentUser }) => {
   return (
@@ -10,57 +11,78 @@ const VacationForm: FC<{ currentUser: User }> = ({ currentUser }) => {
       <Formik
         initialValues={{
           name: "",
-          description: "",
-          ownerID: currentUser?.uid,
+          completed: false,
           cost: 0,
           location: "",
-          participants: "",
+          ownerID: currentUser.uid,
+          participants: [{ name: "", paid: false }],
         }}
-        onSubmit={(
+        onSubmit={async (
           values: Vacation,
           { setSubmitting }: FormikHelpers<Vacation>
         ) => {
           alert(JSON.stringify(values, null, 2));
+          await addVacation(values);
           setSubmitting(false);
         }}
       >
-        <Form>
-          <label htmlFor="name">Name</label>
-          <br />
-          <Field id="name" name="name" placeholder="Vacation name" />
-          <br />
-          <label htmlFor="description">Description</label>
-          <br />
-          <Field
-            id="description"
-            name="description"
-            placeholder="Vacation description"
-          />
-          <br />
-          <label htmlFor="cost">Cost</label>
-          <br />
-          <Field id="cost" name="cost" placeholder="Vacation cost" />
-          <br />
-          <label htmlFor="location">Location</label>
-          <br />
-          <Field
-            id="location"
-            name="location"
-            placeholder="Vacation location"
-          />
-          <br />
-          <label htmlFor="participants">Participants</label>
-          <br />
-          <Field
-            id="participants"
-            name="participants"
-            placeholder="Participants"
-          />
-          <br />
-          <button className="mt-2 border border-zinc-900" type="submit">
-            Submit
-          </button>
-        </Form>
+        {({ values }) => (
+          <Form>
+            <label htmlFor="name">Name</label>
+            <br />
+            <Field id="name" name="name" placeholder="Vacation name" />
+            <br />
+            <label htmlFor="cost">Cost</label>
+            <br />
+            <Field
+              type="number"
+              id="cost"
+              name="cost"
+              placeholder="Vacation cost"
+            />
+            <br />
+            <label htmlFor="location">Location</label>
+            <br />
+            <Field
+              id="location"
+              name="location"
+              placeholder="Vacation location"
+            />
+            <br />
+            <label htmlFor="participants">Participants</label>
+            <br />
+            <FieldArray name="participants">
+              {({ insert, remove, push }) => (
+                <div>
+                  {values.participants.length > 0 &&
+                    values.participants.map((participant, index) => (
+                      <div key={index}>
+                        <Field name={`participants.${index}.name`} />
+                        <br />
+                        <Field
+                          type="checkbox"
+                          name={`participants.${index}.paid`}
+                        />
+                        <button type="button" onClick={() => remove(index)}>
+                          x
+                        </button>
+                      </div>
+                    ))}
+                  <button
+                    type="button"
+                    onClick={() => push({ name: "", paid: false })}
+                  >
+                    add
+                  </button>
+                </div>
+              )}
+            </FieldArray>
+            <br />
+            <button className="mt-2 border border-zinc-900" type="submit">
+              Submit
+            </button>
+          </Form>
+        )}
       </Formik>
     </div>
   );
