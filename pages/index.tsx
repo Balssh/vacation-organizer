@@ -16,22 +16,37 @@ const Home = () => {
       <div className="col-span-8 col-start-3 space-y-2 rounded-md border border-zinc-900 bg-teal-50 p-4">
         <div className="flex justify-center">
           {user ? (
-            <button
-              className="border border-zinc-900 p-2 text-2xl hover:bg-red-400"
-              onClick={() => auth.signOut()}
-            >
-              Sign out
-            </button>
+            <div className="space-y-2">
+              <div>
+                <button className="border border-zinc-900 p-2 text-2xl hover:bg-red-400">
+                  <Link href={"/users/[id]"} as={`/users/${user.uid}`}>
+                    My Profile
+                  </Link>
+                </button>
+              </div>
+              <div>
+                <button
+                  className="border border-zinc-900 p-2 text-2xl hover:bg-red-400"
+                  onClick={() => auth.signOut()}
+                >
+                  Sign out
+                </button>
+              </div>
+            </div>
           ) : (
-            <button className="border border-zinc-900 p-2 text-2xl hover:bg-red-400">
-              <Link href={"/login"}>Login</Link>
-            </button>
+            <div className="space-y-2">
+              <div>
+                <button className="border border-zinc-900 p-2 text-2xl hover:bg-red-400">
+                  <Link href={"/login"}>Login</Link>
+                </button>
+              </div>
+              <div>
+                <button className="border border-zinc-900 p-2 text-2xl hover:bg-red-400">
+                  <Link href={"/register"}>Register</Link>
+                </button>
+              </div>
+            </div>
           )}
-        </div>
-        <div className="flex justify-center">
-          <button className="border border-zinc-900 p-2 text-2xl hover:bg-red-400">
-            <Link href={"/register"}>Register</Link>
-          </button>
         </div>
       </div>
     </div>

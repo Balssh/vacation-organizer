@@ -40,12 +40,16 @@ export const addVacation = async (vacation: Vacation) => {
 
 // Export function to get all vacations from the database
 export const getVacations = async () => {
+  const vacations: Vacation[] = [];
   const querySnapshot = await getDocs(collection(db, "vacations"));
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
+    // console.log(doc.id, " => ", doc.data());
+    vacations.push({ id: doc.id, ...doc.data() } as Vacation);
   });
+  return vacations;
 };
 
+// Export function to get all vacations of a user from the database
 export const getUserVacations = async (userId: string) => {
   const q = query(collection(db, "vacations"), where("userId", "==", userId));
   const querySnapshot = await getDocs(q);

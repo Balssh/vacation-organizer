@@ -4,6 +4,7 @@ export interface LoginUser {
 }
 
 export interface Vacation {
+  id?: string;
   name: string;
   completed: boolean;
   cost: number;

@@ -20,6 +20,11 @@ const User = () => {
   const toggleVacationForm = () => {
     setShowVacationForm(!showVacationForm);
   };
+
+  const handleGetVacations = async () => {
+    const vacations = await getVacations();
+    console.log(vacations);
+  };
   // console.log(user);
   return (
     <div>
@@ -56,7 +61,7 @@ const User = () => {
             <div className="flex">
               <button
                 className="border border-zinc-900 p-2 text-base hover:bg-red-400"
-                onClick={getVacations}
+                onClick={handleGetVacations}
               >
                 Show my vacations
               </button>
