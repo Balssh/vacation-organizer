@@ -6,7 +6,7 @@ import { addVacation } from "../firebase/firebaseApp";
 
 const VacationForm: FC<{ currentUser: User }> = ({ currentUser }) => {
   return (
-    <div>
+    <div className="border border-zinc-900 p-2">
       <h1 className="text-2xl">Vacation Form</h1>
       <Formik
         initialValues={{
@@ -78,9 +78,17 @@ const VacationForm: FC<{ currentUser: User }> = ({ currentUser }) => {
               )}
             </FieldArray>
             <br />
-            <button className="mt-2 border border-zinc-900" type="submit">
-              Submit
-            </button>
+            <div className="flow-root">
+              <button
+                className="float-left mt-2 border border-zinc-900 hover:bg-red-400"
+                type="submit"
+              >
+                Submit
+              </button>
+              <button className="float-right mt-2 border border-zinc-900 hover:bg-red-400">
+                Cancel
+              </button>
+            </div>
           </Form>
         )}
       </Formik>
