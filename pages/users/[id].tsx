@@ -38,12 +38,12 @@ const User = () => {
           <div className="col-span-8 col-start-3 space-y-2 rounded-md border border-zinc-900 bg-teal-50 p-4">
             {showVacationForm ? (
               <div className="space-y-2">
-                <VacationForm currentUser={user!} />
+                <VacationForm
+                  currentUser={user!}
+                  toggleVacationForm={toggleVacationForm}
+                />
                 <div className="flex">
-                  <button
-                    className="border border-zinc-900 p-2 text-base hover:bg-red-400"
-                    onClick={toggleVacationForm}
-                  >
+                  <button className="border border-zinc-900 p-2 text-base hover:bg-red-400">
                     Cancel
                   </button>
                 </div>

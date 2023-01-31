@@ -4,7 +4,10 @@ import { User } from "firebase/auth";
 import { FC } from "react";
 import { addVacation } from "../firebase/firebaseApp";
 
-const VacationForm: FC<{ currentUser: User }> = ({ currentUser }) => {
+const VacationForm: FC<{
+  currentUser: User;
+  toggleVacationForm: () => void;
+}> = ({ currentUser, toggleVacationForm }) => {
   return (
     <div className="border border-zinc-900 p-2">
       <h1 className="text-2xl">Vacation Form</h1>
@@ -85,7 +88,10 @@ const VacationForm: FC<{ currentUser: User }> = ({ currentUser }) => {
               >
                 Submit
               </button>
-              <button className="float-right mt-2 border border-zinc-900 hover:bg-red-400">
+              <button
+                className="float-right mt-2 border border-zinc-900 hover:bg-red-400"
+                onClick={toggleVacationForm}
+              >
                 Cancel
               </button>
             </div>
