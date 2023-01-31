@@ -42,6 +42,7 @@ const VacationForm: FC<{
               id="cost"
               name="cost"
               placeholder="Vacation cost"
+              min="0"
             />
             <br />
             <label htmlFor="location">Location</label>
