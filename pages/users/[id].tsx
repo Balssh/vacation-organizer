@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import VacationForm from "../../components/vacationForm";
 import VacationBox from "../../components/vacationBox";
 import { Vacation } from "../../interfaces/interfaces";
+import { addVacation } from "../../firebase/firebaseApp";
 
 const User = () => {
   const app = initializeFirebase();
@@ -15,9 +16,21 @@ const User = () => {
   const [showVacationForm, setShowVacationForm] = useState(false);
   const [showVacations, setShowVacations] = useState(false);
   const [vacations, setVacations] = useState<Vacation[]>([]);
+  const [initialVacationValues, setInitialVacationValues] =
+    useState<Vacation>();
+
   useEffect(() => {
     if (!user) {
       void router.push("/login");
+    } else {
+      setInitialVacationValues({
+        name: "",
+        completed: false,
+        cost: 0,
+        location: "",
+        ownerID: user.uid,
+        participants: [{ name: "", paid: false }],
+      });
     }
   }, [user]);
 
@@ -53,14 +66,11 @@ const User = () => {
             {showVacationForm ? (
               <div className="space-y-2">
                 <VacationForm
-                  currentUser={user!}
+                  // currentUser={user!}
                   toggleVacationForm={toggleVacationForm}
+                  operationFlag="add"
+                  initialValues={initialVacationValues!}
                 />
-                <div className="flex">
-                  <button className="border border-zinc-900 p-2 text-base hover:bg-red-400">
-                    Cancel
-                  </button>
-                </div>
               </div>
             ) : (
               <div className="flex">
@@ -76,7 +86,11 @@ const User = () => {
               {showVacations ? (
                 <div className="flow-root w-full space-y-2 border border-zinc-900 p-2">
                   {vacations.map((vacation: Vacation) => (
-                    <VacationBox vacationInfo={vacation} key={vacation.id} />
+                    <VacationBox
+                      vacationInfo={vacation}
+                      key={vacation.id}
+                      // currentUser={user!}
+                    />
                   ))}
                   <button
                     className="float-right border border-zinc-900 p-2 hover:bg-red-400"

@@ -6,6 +6,8 @@ import {
   where,
   getDocs,
   query,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 import { Vacation } from "../interfaces/interfaces";
 
@@ -56,4 +58,15 @@ export const getUserVacations = async (userId: string) => {
   querySnapshot.forEach((doc) => {
     console.log(doc.id, " => ", doc.data());
   });
+};
+
+// Export function to update a vacation in the database
+export const updateVacation = async (vacation: Vacation, docID: string) => {
+  try {
+    const docRef = doc(db, "vacations", docID);
+    await setDoc(docRef, vacation);
+    console.log("Document updated successfully");
+  } catch (e) {
+    console.error("Error updating document: ", e);
+  }
 };
