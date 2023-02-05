@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import { Vacation } from "../interfaces/interfaces";
 import VacationForm from "./vacationForm";
-import { User } from "firebase/auth";
 
 const VacationBox: FC<{ vacationInfo: Vacation }> = ({ vacationInfo }) => {
   const [editVacation, setEditVacation] = useState(false);
@@ -11,15 +10,12 @@ const VacationBox: FC<{ vacationInfo: Vacation }> = ({ vacationInfo }) => {
   const toggleEditVacation = () => {
     setEditVacation(!editVacation);
   };
-  // console.log(vacationInfo.);
   return (
     <div className="flex flex-col space-y-2 border border-zinc-900 p-2">
       {editVacation ? (
         <VacationForm
-          // currentUser={currentUser}
           toggleVacationForm={toggleEditVacation}
           operationFlag="edit"
-          docID={vacationInfo.id}
           initialValues={vacationInfo!}
         />
       ) : (

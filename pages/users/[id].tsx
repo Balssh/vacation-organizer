@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import VacationForm from "../../components/vacationForm";
 import VacationBox from "../../components/vacationBox";
 import { Vacation } from "../../interfaces/interfaces";
-import { addVacation } from "../../firebase/firebaseApp";
+
+// TODO: Change the data fetching to use getServersideProps
 
 const User = () => {
   const app = initializeFirebase();
@@ -46,7 +47,7 @@ const User = () => {
     setVacations(data);
     toggleShowVacations();
   };
-  // console.log(user);
+
   return (
     <div>
       {loading ? (
@@ -66,7 +67,6 @@ const User = () => {
             {showVacationForm ? (
               <div className="space-y-2">
                 <VacationForm
-                  // currentUser={user!}
                   toggleVacationForm={toggleVacationForm}
                   operationFlag="add"
                   initialValues={initialVacationValues!}
@@ -86,11 +86,7 @@ const User = () => {
               {showVacations ? (
                 <div className="flow-root w-full space-y-2 border border-zinc-900 p-2">
                   {vacations.map((vacation: Vacation) => (
-                    <VacationBox
-                      vacationInfo={vacation}
-                      key={vacation.id}
-                      // currentUser={user!}
-                    />
+                    <VacationBox vacationInfo={vacation} key={vacation.id} />
                   ))}
                   <button
                     className="float-right border border-zinc-900 p-2 hover:bg-red-400"

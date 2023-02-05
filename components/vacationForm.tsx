@@ -1,45 +1,30 @@
 import { Formik, Field, Form, FormikHelpers, FieldArray } from "formik";
 import { Vacation } from "../interfaces/interfaces";
-import { User } from "firebase/auth";
 import { FC } from "react";
 import { updateVacation } from "../firebase/firebaseApp";
 import { addVacation } from "../firebase/firebaseApp";
+import { useRouter } from "next/router";
 
 const VacationForm: FC<{
-  // currentUser: User;
   toggleVacationForm: () => void;
   operationFlag: string;
-  docID?: string;
   initialValues: Vacation;
-}> = ({
-  // currentUser,
-  toggleVacationForm,
-  operationFlag,
-  docID,
-  initialValues,
-}) => {
+}> = ({ toggleVacationForm, operationFlag, initialValues }) => {
+  const router = useRouter();
   return (
     <div className="border border-zinc-900 p-2">
       <h1 className="text-2xl">Vacation Form</h1>
       <Formik
-        // initialValues={{
-        //   name: "",
-        //   completed: false,
-        //   cost: 0,
-        //   location: "",
-        //   ownerID: currentUser.uid,
-        //   participants: [{ name: "", paid: false }],
-        // }}
         initialValues={initialValues}
         onSubmit={async (
           values: Vacation,
           { setSubmitting }: FormikHelpers<Vacation>
         ) => {
-          alert(JSON.stringify(values, null, 2));
+          // alert(JSON.stringify(values, null, 2));
           if (operationFlag === "add") {
             await addVacation(values);
           } else if (operationFlag === "edit") {
-            await updateVacation(values, docID!);
+            await updateVacation(values, initialValues.id!);
           }
           setSubmitting(false);
         }}
@@ -72,18 +57,18 @@ const VacationForm: FC<{
             <br />
             <FieldArray name="participants">
               {({ remove, push }) => (
-                <div>
+                <div className="border border-zinc-900">
                   {values.participants.length > 0 &&
                     values.participants.map((participant, index) => (
                       <div
                         key={index}
-                        className="flex flex-col items-start justify-start space-x-2 border border-zinc-900"
+                        className="flex flex-col items-start justify-start space-x-2 "
                       >
                         <Field
                           name={`participants.${index}.name`}
                           placeholder="Name"
                         />
-                        <div>
+                        <div className="space-x-2">
                           <label htmlFor={`participants.${index}.paid`}>
                             Paid?
                           </label>
